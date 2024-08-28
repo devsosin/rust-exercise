@@ -13,6 +13,35 @@
 // You don't have to though: it's perfectly okay to write three separate
 // implementations manually. Venture further only if you're curious.
 
+// generics가 바뀌면 해당 타입에 대한 impl이 서로 다른것으로 구현됨
+trait Power<Exponent = Self> {
+    type Output;
+
+    fn power(&self, n: Exponent) -> Self::Output;
+}
+
+impl Power<u16> for u32 {
+    type Output = u32;
+
+    fn power(&self, n: u16) -> Self::Output {
+        self.pow(n.into())
+    }
+}
+impl Power<u32> for u32 {
+    type Output = u32;
+
+    fn power(&self, n: u32) -> Self::Output {
+        self.pow(n)
+    }
+}
+impl Power<&u32> for u32 {
+    type Output = u32;
+
+    fn power(&self, n: &u32) -> Self::Output {
+        self.pow(*n) // to_owned()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::Power;
