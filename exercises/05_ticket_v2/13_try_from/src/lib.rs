@@ -8,6 +8,64 @@ enum Status {
     Done,
 }
 
+#[derive(Debug)]
+enum ConvertError {
+    ConvertError
+}
+
+// #[derive(Debug, thiserror::Error)]
+// #[error("{invalid_status} is not a valid status")]
+// struct ParseStatusError {
+//     invalid_status: String,
+// }
+
+// impl TryFrom<String> for Status {
+//     type Error = ConvertError;
+
+//     fn try_from(value: String) -> Result<Self, Self::Error> {
+//         if &value == "ToDO" {
+//             Ok(Status::ToDo)
+//         } else if &value == "inproGress" {
+//             Ok(Status::InProgress)   
+//         } else if &value == "Done" {
+//             Ok(Status::Done)
+//         } else {
+//             Err(ConvertError::ConvertError)
+//         }
+//     }
+// }
+
+impl TryFrom<String> for Status {
+    type Error = ConvertError;
+    
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        value.as_str().try_into()
+    }
+}
+
+impl TryFrom<&str> for Status {
+    type Error = ConvertError;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        match value.to_lowercase().as_str() {
+            "todo" => Ok(Status::ToDo),
+            "inprogress" => Ok(Status::InProgress),
+            "done" => Ok(Status::Done),
+            _ => Err(ConvertError::ConvertError),
+            // Err(ParseStatusError { invalid_status: value.to_string() })
+        }
+        // if value == "todo" {
+        //     Ok(Status::ToDo)
+        // } else if value == "inprogress" {
+        //     Ok(Status::InProgress)   
+        // } else if value == "done" {
+        //     Ok(Status::Done)
+        // } else {
+        //     Err(ConvertError::ConvertError)
+        // }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
