@@ -6,6 +6,16 @@ pub struct TicketStore {
     tickets: Vec<Ticket>,
 }
 
+// 잘 모르겠다. 직접 구현할 일은 많이 없을 것 같은데 라이프타임 부분은 다시 공부해야 할 듯
+impl<'a> IntoIterator for &'a TicketStore {
+    type Item = &'a Ticket;
+    type IntoIter = core::slice::Iter<'a, Ticket>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.tickets.iter()
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Ticket {
     pub title: TicketTitle,
